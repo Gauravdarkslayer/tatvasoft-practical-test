@@ -10,20 +10,20 @@ const userSchema = new mongoose.Schema({
     hash:{type:String},
     salt:{type:String},
     dob:{type:Date},
-    role:{enum:['admin','user']}
+    role:{type:String}
 });
 
 
-userSchema.methods.generateJwt = ()=>{
+userSchema.methods.generateJwt = function (){
     return jwt.sign({_id: this._id},config.secretKey);
 };
 
-userSchema.methods.setPassword = (password) =>{
+userSchema.methods.setPassword = function (password) {
     this.salt = crypto.randomBytes(16).toString('hex');
     this.hash = crypto.pbkdf2Sync(password,this.salt,10000,512,'sha512').toString('hex');
 };
 
-userSchema.methods.validPassword = (password) =>{
+userSchema.methods.validPassword =function (password) {
     let hash = crypto.pbkdf2Sync(password,this.salt,10000,512,'sha512').toString('hex');
     return this.hash === hash;
 };

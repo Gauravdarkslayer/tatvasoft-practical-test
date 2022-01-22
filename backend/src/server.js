@@ -10,31 +10,37 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const helmet = require('helmet');
+const config = require('./config/config.json');
+const db = require('./config/database.json');
+const mongoose = require('mongoose');
+const morgan = require('morgan');
 
-
-const logger = require('./util/logger');
-
-// Load .env Enviroment Variables to process.env
-
-require('mandatoryenv').load([
-    'DB_URL',
-    'PORT',
-    'SECRET'
-]);
-
-const { PORT } = process.env;
+// Connect with mongoose
+const connString = `mongodb://${db[config.env].host}:${db[config.env].port}/${db[config.env].database}?authSource=admin&w=1`;
+mongoose.connect(connString,{
+    auth: {
+        username: db[config.env].user,
+        password: db[config.env].password
+    },
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(()=>{
+    console.log('Successfully connected to mongodb');
+}).catch((err)=>{
+    console.error("connection error",err);
+})
 
 
 // Instantiate an Express Application
 const app = express();
-
+const PORT = process.env.PORT || config.port
 
 // Configure Express App Instance
 app.use(express.json( { limit: '50mb' } ));
 app.use(express.urlencoded( { extended: true, limit: '10mb' } ));
 
 // Configure custom logger middleware
-app.use(logger.dev, logger.combined);
+app.use(morgan('dev'));
 
 app.use(cookieParser());
 app.use(cors());
