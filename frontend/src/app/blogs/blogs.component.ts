@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/core/services';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder,FormGroup,Validators } from '@angular/forms';
-import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import {MatBottomSheet, MatBottomSheetRef,MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import {IBlog} from './blogs.interface';
 import { JwtService } from '../core/services/jwt.service';
@@ -61,7 +61,8 @@ export class BlogsComponent implements OnInit {
       }
     })
   }
-  deleteBlog(data:any){
+  deleteBlog(data:IBlog){
+    if(confirm('Are you sure you want to delete this blog?')){
     this.userService.deleteBlog({_id:data._id}).subscribe({
       next:(res)=>{
         this.spinner.hide();
@@ -77,6 +78,12 @@ export class BlogsComponent implements OnInit {
       }
     })
   }
+  }
+  editBlog(data:any){
+    const bottomSheetRef =this._bottomSheet.open(BottomSheetOverviewExampleSheet,
+      {data});
+
+  }
   logout(){
     this.jwtService.destroyToken();
     this.router.navigate(['/auth/login'])
@@ -90,17 +97,21 @@ export class BlogsComponent implements OnInit {
 export class BottomSheetOverviewExampleSheet {
   blogAddForm!:FormGroup;
 
-  constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>,
+  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data:any,private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>,
     private spinner: NgxSpinnerService,
     private userService: UserService,
     private toastr:ToastrService,
     private fb:FormBuilder,
+    
     ) {
     this.blogAddForm = this.fb.group({
       title:['',Validators.required],
       description:['',Validators.required],
       status:['',Validators.required],
     });
+    if(data){
+      this.blogAddForm.patchValue(data);
+    }
   }
 
  

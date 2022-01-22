@@ -1,9 +1,11 @@
 const Blog = require('../models/blog');
 const httpStatus = require('http-status-codes').StatusCodes;
 
+
 module.exports.createBlog= async(req,res) =>{
     try {
         req.body.author = req.user._id;
+        req.body.date = new Date();
         let blog = new Blog(req.body);
         await blog.save();
         return res.send({"status":true,"message":"Blog created successfully","statusCode":httpStatus.OK,"data":blog});

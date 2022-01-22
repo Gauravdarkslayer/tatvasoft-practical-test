@@ -1,6 +1,19 @@
 const User = require('../models/user');
 const httpStatus = require('http-status-codes').StatusCodes;
 
+
+
+/**
+ * User Signup
+ * @author Gaurav Bhojwani
+ * @version 1.0
+ * @param {string} firstname - User's First name 
+ * @param {string} lastname - User's Last name
+ * @param {string} email - User's email name
+ * @param {string} password - User's password
+ * @param {string} role - User's role
+ * @param {string} dob - User's dob
+ */
 module.exports.signup = async(req,res) =>{
     try {
         const { firstname,lastname,email,dob,role,password } = req.body;
@@ -19,6 +32,15 @@ module.exports.signup = async(req,res) =>{
     }
 };
 
+
+/**
+ * User Login
+ * @author Gaurav Bhojwani
+ * @version 1.0
+ * @param {string} email - User's email name
+ * @param {string} password - User's password
+ * @param {string} role - User's role
+ */
 module.exports.login = async(req,res) =>{
     try {
         const {email,password,role} = req.body;
