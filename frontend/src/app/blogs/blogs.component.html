@@ -1,3 +1,7 @@
+
+<button mat-raised-button (click)="logout()">LOGOUT</button>
+<button mat-raised-button (click)="openBottomSheet()">Add Blog</button>
+
 <table mat-table [dataSource]="blogs" class="mat-elevation-z8">
 
     <!--- Note that these columns can be defined in any order.
@@ -25,6 +29,12 @@
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef> status </th>
       <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+    </ng-container>
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> action </th>
+        <td mat-cell *matCellDef="let element"> {{element.action}}<button mat-raised-button color="danger"(click)="deleteBlog(element)">Delete</button> </td>
     </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

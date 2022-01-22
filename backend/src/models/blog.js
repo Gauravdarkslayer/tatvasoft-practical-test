@@ -5,7 +5,7 @@ const blogSchema = new mongoose.Schema({
     title:{type:String},
     description:{type:String},
     date:{type:Date},
-    status:{enum:['active','inactive']},
+    status:{type:String},
 })
 
 module.exports = mongoose.model('blog',blogSchema);

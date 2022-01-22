@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
         this.spinner.hide();
         if(res.statusCode === 200){
           this.toastr.success(res.message);
-          this.jwtService.saveToken(res.data.jwtToken);
+          this.jwtService.saveToken(res.data.accessToken);
           this.router.navigate(['/blogs']);
         } else {
           this.spinner.hide();

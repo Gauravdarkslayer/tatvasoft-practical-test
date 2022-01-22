@@ -4,10 +4,11 @@ const User = require('../models/user');
 
 module.exports.auth = async(req,res,next) => {
     try {
+        console.log(req.header('Authorization'))
         if(req.header('Authorization')){
-            const token = req.header('Authorization').replace('Bearer ','');
+            const token = req.header('Authorization');
             const data = jwt.verify(token, config.secretKey);
-            const user = await User.findOne({email: data.email});
+            const user = await User.findOne({_id: data._id});
             if(user){
                 req.user = user;
                 req.token = token;

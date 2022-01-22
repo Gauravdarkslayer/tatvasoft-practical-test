@@ -39,6 +39,8 @@ export class RegisterComponent implements OnInit {
         if(res.statusCode === 200){
           this.toastr.success(res.message);
           this.router.navigate(['/auth/login'])
+        } else {
+          this.toastr.error(res.message);
         }
       },
       error:(err)=>{
